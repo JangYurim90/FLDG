@@ -124,3 +124,4 @@ def test_inference(args, model, test_dataset):
 
     accuracy = correct / total
     return accuracy, loss
+
