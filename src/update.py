@@ -31,7 +31,7 @@ class LocalUpdate(object):
         idxs_test = idxs[int(0.9*len(idxs)):]
 
         trainloader = DataLoader(DatasetSplit(dataset, idxs_train),
-                                 batch_size=self.args.local_bs, suffule=True)
+                                 batch_size=self.args.local_bs, shuffle=True)
         validloader = DataLoader(DatasetSplit(dataset, idxs_val),
                                  batch_size=int(len(idxs_val)/10), shuffle=False)
         testloader = DataLoader(DatasetSplit(dataset, idxs_test),
@@ -39,7 +39,7 @@ class LocalUpdate(object):
 
         return trainloader, validloader, testloader
 
-    def update_weight(self, model, global_round):
+    def update_weights(self, model, global_round):
         # train model
         model.train()
         epoch_loss=[]
@@ -84,7 +84,7 @@ class LocalUpdate(object):
         loss, total, correct = 0.0,0.0,0.0
 
         for batch_idx, (images, labels) in enumerate(self.testloader):
-            images, labels = images.to(self.deivce), labels.to(self.device)
+            images, labels = images.to(self.device), labels.to(self.device)
 
             # Inference
             outputs = model(images)
@@ -94,7 +94,7 @@ class LocalUpdate(object):
             # Prediction
             _, pred_labels = torch.max(outputs, 1)
             pred_labels = pred_labels.view(-1)
-            correct += torch.sum(torch.eq(pred_labels, labels)).items()
+            correct += torch.sum(torch.eq(pred_labels, labels)).item()
             total += len(labels)
 
         accuracy = correct / total
@@ -105,7 +105,7 @@ def test_inference(args, model, test_dataset):
     loss, total, correct = 0.0,0.0,0.0
 
     device = 'cuda' if args.gpu else 'cpu'
-    criterion = nn.NLLoss().to(device)
+    criterion = nn.NLLLoss().to(device)
     testloader = DataLoader(test_dataset, batch_size=128, shuffle=False)
 
     for batch_idx, (images, labels) in enumerate(testloader):

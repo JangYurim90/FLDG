@@ -23,8 +23,8 @@ if __name__ == '__main__':
     args = args_parser()
     exp_details(args)
 
-    if args.gpu_id:
-        torch.cuda.set_device(args.gpu_id)
+    #if args.gpu_id:
+    #    torch.cuda.set_device(args.gpu_id)
     device = 'cuda' if args.gpu else 'cpu'
 
     #load dataset and user groups
@@ -68,7 +68,7 @@ if __name__ == '__main__':
             w, loss = local_model.update_weights(
                 model=copy.deepcopy(global_model), global_round=epoch
             )
-            local_weights.append(copy.deepcopy(global_model), global_round=epoch)
+            local_weights.append(copy.deepcopy(w))
             local_losses.append(copy.deepcopy(loss))
 
         # update global weights
