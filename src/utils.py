@@ -27,7 +27,7 @@ def get_dataset(args):
 
     return train_dataset, test_dataset, user_groups
 
-def average_weight(w):
+def average_weights(w):
     w_avg = copy.deepcopy(w[0]) #w[0] 깊은 복사
     for key in w_avg.keys():
         for i in range(1,len(w)):
