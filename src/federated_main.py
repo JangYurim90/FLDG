@@ -4,6 +4,8 @@ import time
 import pickle
 import numpy as np
 from tqdm import tqdm
+import matplotlib
+import matplotlib.pyplot as plt
 
 import torch
 from tensorboardX import SummaryWriter
@@ -12,6 +14,8 @@ from options import args_parser
 from update import LocalUpdate, test_inference
 from models import CNNMnist
 from utils import get_dataset, average_weights, exp_details
+
+os.environ['KMP_DUPLICATE_LIB_OK']='True'
 
 if __name__ == '__main__':
     start_time = time.time()
