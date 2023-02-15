@@ -138,3 +138,10 @@ print(" ")
     # plt.savefig('../save/fed_{}_{}_{}_C[{}]_iid[{}]_E[{}]_B[{}]_acc.png'.
     #             format(args.dataset, args.model, args.epochs, args.frac,
     #                    args.iid, args.local_ep, args.local_bs))
+
+"""   
+file_name = '../save/objects/{}_{}_{}_C[{}]_iid[{}]_E[{}]_B[{}].npy'. \
+    format(args.dataset, args.model, args.epochs, args.frac, args.iid,
+           args.local_ep, args.local_bs)
+np.save(file_name, train_accuracy)
+"""
