@@ -13,7 +13,7 @@ class DatasetSplit(Dataset):
     def __getitem__(self,item): # image와 label을 tensor 타입을 얻는다.
         image, label = self.dataset[self.idxs[item]]
         return torch.tensor(image), torch.tensor(label)
-
+        #return image.clone().detach(), label.clone().detach()
 class LocalUpdate(object):
     def __init__(self, args, dataset, idxs, logger):
         self.args = args
@@ -21,7 +21,7 @@ class LocalUpdate(object):
         self.trainloader, self.validloader, self.testloader = self.train_val_test(
             dataset, list(idxs)
         ) # data split과정
-        self.device = 'cuda' if args.gpu else 'cpu'
+        self.device = 'cuda:0' #if args.gpu else 'cpu'
         # loss function은 NLL로 default
         self.criterion = nn.NLLLoss().to(self.device)
 
@@ -31,7 +31,7 @@ class LocalUpdate(object):
         idxs_test = idxs[int(0.9*len(idxs)):]
 
         trainloader = DataLoader(DatasetSplit(dataset, idxs_train), # int(len(idxs_train)) self.args.local_bs
-                                 batch_size=int(len(idxs_train)), shuffle=True)
+                                 batch_size=self.args.local_bs, shuffle=True)
         validloader = DataLoader(DatasetSplit(dataset, idxs_val),
                                  batch_size=int(len(idxs_val)/10), shuffle=False)
         testloader = DataLoader(DatasetSplit(dataset, idxs_test),
@@ -104,7 +104,7 @@ def test_inference(args, model, test_dataset):
     model.eval()
     loss, total, correct = 0.0,0.0,0.0
 
-    device = 'cuda' if args.gpu else 'cpu'
+    device = 'cuda:0' if args.gpu else 'cpu'
     criterion = nn.NLLLoss().to(device)
     testloader = DataLoader(test_dataset, batch_size=128, shuffle=False)
 
