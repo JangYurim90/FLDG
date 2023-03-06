@@ -33,4 +33,7 @@ class Sagnet(nn.Module):
                            style_stage=args.style_stage)
 
         print(model)
-        model = torch.nn.DataParallel(model).cuda()
+        #model = torch.nn.DataParallel(model).cuda()
+    def parameter(self):
+        p = model.module.parameters()
+        return p

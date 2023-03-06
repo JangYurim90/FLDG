@@ -5,6 +5,7 @@ from sampling import mnist_iid, mnist_noniid
 import os
 import torch.optim as optim
 from collections import OrderedDict
+from torch import nn
 
 def get_dataset_mnist(args):
     """
@@ -137,7 +138,8 @@ def init_optimizer(args,model):
         sch_hyperparams = {'T_max': args.iterations}
 
     # Main learning
-    params = model.module.parameters()
+    #params = model.module.parameters()
+
     optimizer = optim.SGD(params, **optim_hyperparams)
     scheduler = Scheduler(optimizer, **sch_hyperparams)
     criterion = torch.nn.CrossEntropyLoss()

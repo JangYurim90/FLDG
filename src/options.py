@@ -10,9 +10,9 @@ def args_parser():
                         help='dataset name')
     parser.add_argument('--model', type=str, default='sagnet',
                         help='model name')
-    parser.add_argument('--sources', type=str, nargs=['art_painting', 'cartoon'],
+    parser.add_argument('--sources', type=str, default= ['cartoon', 'photo'],
                         help='domains for train')
-    parser.add_argument('--targets', type=str, nargs='*',
+    parser.add_argument('--targets', type=str, default= ['Rest'],
                         help='domains for test')
 
     # save dir
@@ -32,6 +32,8 @@ def args_parser():
                         help='crop image size')
     parser.add_argument('--colorjitter', type=float, default=0.4,
                         help='color jittering')
+    parser.add_argument('--num_classes', type=int, default=7,
+                        help="number of classes")
 
     # model
     parser.add_argument('--arch', type=str, default='sag_resnet',
@@ -78,7 +80,7 @@ def args_parser():
                         help='iterations for logging test status')
     parser.add_argument('--test-interval', type=int, default=100,
                         help='iterations for test')
-    parser.add_argument('-g', '--gpu-id', type=str, default='0',
+    parser.add_argument('-g', '--gpu-id', type=int, default=0,
                         help='gpu id')
 
     # federated arguments

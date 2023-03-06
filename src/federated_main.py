@@ -34,10 +34,10 @@ if __name__ == '__main__':
     args = args_parser()
     exp_details(args)
 
-    #if args.gpu_id:
-     #   torch.cuda.set_device(args.gpu_id)
-    #else:
-    device = 'cpu'
+    if args.gpu_id:
+        torch.cuda.set_device(args.gpu_id)
+    else:
+        device = 'cpu'
 
     # Set domains
     if args.dataset == 'pacs':
@@ -47,6 +47,17 @@ if __name__ == '__main__':
         args.sources = [d for d in all_domains if d not in args.targets]
     if args.targets[0] == 'Rest':
         args.targets = [d for d in all_domains if d not in args.sources]
+
+    # client 한명이 도메인 하나만 가지고 있을 필요없음. art_painting의 일부 클래스만 가지고 있는 방식으로 (나눠가져야함) / dataset size는 다 똑같이하는 것이 나을 것임
+    # client 수의 설정? => 수가 더 적으면 성능이 안 나올 것임. 모든 데이터 샘플을 다 나눠가지고 매 라운드 마다 선택하는 클라이언트 숫자를 선택해 나간다.
+    # weigthed average 할 때 각 클라이언트가 가지고 있는 데이터의 수로 나누어준다. (랜덤으로 client 뽑았을 때, 그 때의 총 데이터 갯수도 변수로 사용)
+    # 소스 도메인마다 데이터가 몇개인지 등등 기록해서 가져오기
+
+    # 처음 : 각 client가 랜덤으로 class 를 가져가서 함.
+    # 다음 스텝 client 1 : art(dog, cat), client 2: art(horse, cow),,,,21:photo (dog, cat)
+
+    # art painting
+    # 최소한 각 client들이 sagnet이 돌아가는지 확인해보기. => 전체 FL 돌아가는지 지켜보기 (+어떻게 데이터 샘플을 분배했는지 분명하게 설명 준비 & 코드)
 
     if len(args.sources) == 2:  # 도메인 2개 2개 나누는 경우
         args.targets = [d for d in all_domains if d not in args.sources]
