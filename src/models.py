@@ -1,5 +1,8 @@
 from torch import nn
 import torch.nn.functional as F
+from Sagnet.modules.sag_resnet import sag_resnet
+from Sagnet.modules.loss import *
+from Sagnet.modules.utils import *
 
 class CNNMnist(nn.Module):
     def __init__(self, args):
@@ -18,3 +21,16 @@ class CNNMnist(nn.Module):
         x = F.dropout(x, training=self.training)
         x = self.fc2(x)
         return F.log_softmax(x, dim=1)
+
+class Sagnet(nn.Module):
+    def __init__(self, args):
+        global model
+        model = sag_resnet(depth=int(args.depth),
+                           pretrained=not args.from_sketch,
+                           num_classes=args.num_classes,
+                           drop=args.drop,
+                           sagnet=args.sagnet,
+                           style_stage=args.style_stage)
+
+        print(model)
+        model = torch.nn.DataParallel(model).cuda()

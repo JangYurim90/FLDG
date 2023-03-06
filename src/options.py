@@ -8,7 +8,9 @@ def args_parser():
                         help='home directory to dataset')
     parser.add_argument('--dataset', type=str, default='pacs',
                         help='dataset name')
-    parser.add_argument('--sources', type=str, nargs='*',
+    parser.add_argument('--model', type=str, default='sagnet',
+                        help='model name')
+    parser.add_argument('--sources', type=str, nargs=['art_painting', 'cartoon'],
                         help='domains for train')
     parser.add_argument('--targets', type=str, nargs='*',
                         help='domains for test')
@@ -80,16 +82,28 @@ def args_parser():
                         help='gpu id')
 
     # federated arguments
-    parser.add_argument('--global-ep',type = int, default = 1000,
+    parser.add_argument('--global-ep',type = int, default = 100,
                         help="number of rounds of training")
-    parser.add_argument('--num_users', type=int, default=100,
+    parser.add_argument('--num_users', type=int, default=4,
                         help="number of users : K")
-    parser.add_argument('--frac', type=float, default=0.1,
+    parser.add_argument('--frac', type=float, default=0.5,
                         help="the fraction of clients : C")
     parser.add_argument('--local_ep', type=int, default=5,
                         help="the number of local epochs: E")
-    parser.add_argument('--local_bs', type=int, default=10,
+    parser.add_argument('--local_bs', type=int, default=32,
                         help="local batch size : B")
+
+    #others
+    parser.add_argument('--iid', type=int, default=0,
+                        help='Default set to IID. Set to 0 for non-IID.')
+    parser.add_argument('--unequal', type=int, default=0,
+                        help='whether to use unequal data splits for  \
+                               non-i.i.d setting (use 0 for equal splits)')
+    parser.add_argument('--stopping_rounds', type=int, default=10,
+                        help='rounds of early stopping')
+
+    args = parser.parse_args()
+    return args
 
 '''
     # model arguments
@@ -113,23 +127,11 @@ def args_parser():
 
 
     # other arguments
-    #parser.add_argument('--dataset', type=str, default='mnist', help="name \
-                           of dataset")
-    #parser.add_argument('--num_classes', type=int, default=10, help="number \
-                           of classes")
-    #parser.add_argument('--gpu', default=1, help="To use cuda, set \
-                           to a specific GPU ID. Default set to use CPU.")
-    #parser.add_argument('--optimizer', type=str, default='sgd', help="type \
-                           of optimizer")
-    parser.add_argument('--iid', type=int, default=0,
-                        help='Default set to IID. Set to 0 for non-IID.')
-    parser.add_argument('--unequal', type=int, default=0,
-                        help='whether to use unequal data splits for  \
-                           non-i.i.d setting (use 0 for equal splits)')
-    parser.add_argument('--stopping_rounds', type=int, default=10,
-                        help='rounds of early stopping')
+    #parser.add_argument('--dataset', type=str, default='mnist', help="name \of dataset")
+    #parser.add_argument('--num_classes', type=int, default=10, help="number \of classes")
+    #parser.add_argument('--gpu', default=1, help="To use cuda, set \to a specific GPU ID. Default set to use CPU.")
+    #parser.add_argument('--optimizer', type=str, default='sgd', help="type \of optimizer")
+
     #parser.add_argument('--verbose', type=int, default=1, help='verbose')
     #parser.add_argument('--seed', type=int, default=1, help='random seed')
 
-    args = parser.parse_args()
-    return args
